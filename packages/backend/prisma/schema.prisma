@@ -1,0 +1,172 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String      @id @default(uuid())
+  email       String      @unique
+  password    String
+  firstName   String
+  lastName    String
+  role        Role        @default(EMPLOYEE)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  employee    Employee?
+  
+  @@map("users")
+}
+
+enum Role {
+  ADMIN
+  HR
+  CFO
+  EMPLOYEE
+  SYSTEM_ADMIN
+}
+
+model Department {
+  id          String      @id @default(uuid())
+  name        String      @unique
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  employees   Employee[]
+  
+  @@map("departments")
+}
+
+model Employee {
+  id                String              @id @default(uuid())
+  userId            String              @unique
+  user              User                @relation(fields: [userId], references: [id])
+  departmentId      String
+  department        Department          @relation(fields: [departmentId], references: [id])
+  position          String
+  dateOfJoining     DateTime
+  salary            Float
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  attendances       Attendance[]
+  leaves            Leave[]
+  payrolls          Payroll[]
+  performanceReviews PerformanceReview[] @relation("reviewee")
+  reviewsGiven      PerformanceReview[] @relation("reviewer")
+  documents         Document[]
+  
+  @@map("employees")
+}
+
+model Attendance {
+  id          String            @id @default(uuid())
+  employeeId  String
+  employee    Employee          @relation(fields: [employeeId], references: [id])
+  date        DateTime
+  clockIn     DateTime
+  clockOut    DateTime?
+  status      AttendanceStatus
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  
+  @@map("attendances")
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  LEAVE
+}
+
+model Leave {
+  id          String       @id @default(uuid())
+  employeeId  String
+  employee    Employee     @relation(fields: [employeeId], references: [id])
+  type        LeaveType
+  startDate   DateTime
+  endDate     DateTime
+  reason      String
+  status      LeaveStatus  @default(PENDING)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  
+  @@map("leaves")
+}
+
+enum LeaveType {
+  ANNUAL
+  SICK
+  MATERNITY
+  PATERNITY
+  UNPAID
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model Payroll {
+  id          String        @id @default(uuid())
+  employeeId  String
+  employee    Employee      @relation(fields: [employeeId], references: [id])
+  month       Int
+  year        Int
+  baseSalary  Float
+  allowances  Float
+  deductions  Float
+  tax         Float
+  netSalary   Float
+  status      PayrollStatus @default(DRAFT)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  
+  @@map("payrolls")
+}
+
+enum PayrollStatus {
+  DRAFT
+  PROCESSED
+  PAID
+}
+
+model PerformanceReview {
+  id          String        @id @default(uuid())
+  employeeId  String
+  employee    Employee      @relation("reviewee", fields: [employeeId], references: [id])
+  reviewerId  String
+  reviewer    Employee      @relation("reviewer", fields: [reviewerId], references: [id])
+  reviewPeriod String
+  ratings     Json
+  comments    String
+  goals       String[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  
+  @@map("performance_reviews")
+}
+
+model Document {
+  id          String        @id @default(uuid())
+  employeeId  String
+  employee    Employee      @relation(fields: [employeeId], references: [id])
+  type        DocumentType
+  name        String
+  url         String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  
+  @@map("documents")
+}
+
+enum DocumentType {
+  CONTRACT
+  CERTIFICATE
+  IDENTIFICATION
+  PERFORMANCE_REVIEW
+  OTHER
+}

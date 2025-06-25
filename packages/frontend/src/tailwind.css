@@ -1,0 +1,121 @@
+/* packages/frontend/src/tailwind.css */
+
+/* Define custom colors */
+@theme {
+  --color-primary: #0A1E3D;
+  --color-primary-50: #E6EBF4;
+  --color-primary-100: #C2CFDF;
+  --color-primary-200: #9BB1CB;
+  --color-primary-300: #7494B7;
+  --color-primary-400: #4E77A3;
+  --color-primary-500: #365582;
+  --color-primary-600: #263C5C;
+  --color-primary-700: #162336;
+  --color-primary-800: #080E17;
+  --color-primary-900: #000000;
+
+  /* Define custom utility classes for primary color */
+  .bg-primary {
+    background-color: var(--color-primary);
+  }
+  .bg-primary-50 {
+    background-color: var(--color-primary-50);
+  }
+  .bg-primary-100 {
+    background-color: var(--color-primary-100);
+  }
+  .bg-primary-200 {
+    background-color: var(--color-primary-200);
+  }
+  .bg-primary-300 {
+    background-color: var(--color-primary-300);
+  }
+  .bg-primary-400 {
+    background-color: var(--color-primary-400);
+  }
+  .bg-primary-500 {
+    background-color: var(--color-primary-500);
+  }
+  .bg-primary-600 {
+    background-color: var(--color-primary-600);
+  }
+  .bg-primary-700 {
+    background-color: var(--color-primary-700);
+  }
+  .bg-primary-800 {
+    background-color: var(--color-primary-800);
+  }
+  .bg-primary-900 {
+    background-color: var(--color-primary-900);
+  }
+
+  .text-primary {
+    color: var(--color-primary);
+  }
+  .text-primary-50 {
+    color: var(--color-primary-50);
+  }
+  /* Add more text color classes if needed */
+
+  .border-primary {
+    border-color: var(--color-primary);
+  }
+  /* Add more border color classes if needed */
+
+  .hover\:bg-primary:hover {
+    background-color: var(--color-primary);
+  }
+  .hover\:bg-primary-600:hover {
+    background-color: var(--color-primary-600);
+  }
+  /* Add more hover classes if needed */
+
+  /* Add any other custom utility classes you need */
+}
+
+/* Define responsive breakpoints */
+@custom-media --sm (min-width: 640px);
+@custom-media --md (min-width: 768px);
+@custom-media --lg (min-width: 1024px);
+@custom-media --xl (min-width: 1280px);
+@custom-media --2xl (min-width: 1536px);
+
+/* Define base styles */
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  body {
+    background-color: #f9fafb;
+    color: #111827;
+    min-height: 100vh;
+  }
+}
+
+/* Define component styles */
+@layer components {
+  .btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-radius: 0.375rem;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--color-primary-600);
+  }
+  
+  .card {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+  }
+}
