@@ -1,0 +1,51 @@
+version: "3.8"
+
+services:
+  database:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: persmon_ems
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres123}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      target: backend-production
+    environment:
+      DATABASE_URL: postgresql://postgres:${DB_PASSWORD:-postgres123}@database:5432/persmon_ems?schema=public
+      JWT_SECRET: ${JWT_SECRET:-development-jwt-secret-change-in-production}
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: 3001
+    ports:
+      - "3001:3001"
+    depends_on:
+      database:
+        condition: service_healthy
+    command: >
+      sh -c "npx prisma db push && 
+             npx prisma db seed && 
+             npm run start:prod"
+
+  frontend:
+    build:
+      context: .
+      target: frontend-production
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_URL=http://localhost:3001
+
+volumes:
+  postgres_data:

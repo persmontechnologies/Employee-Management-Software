@@ -1,0 +1,31 @@
+# Production Dockerfile for Backend
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+COPY packages/backend/package*.json ./packages/backend/
+COPY packages/shared/package*.json ./packages/shared/
+
+# Install dependencies
+RUN npm ci --only=production
+
+# Copy source code
+COPY packages/shared ./packages/shared
+COPY packages/backend ./packages/backend
+
+# Build shared package
+RUN cd packages/shared && npm run build
+
+# Generate Prisma client
+RUN cd packages/backend && npx prisma generate
+
+# Build backend
+RUN cd packages/backend && npm run build
+
+# Expose port
+EXPOSE 3001
+
+# Start application
+CMD ["npm", "run", "start", "--workspace=backend"]

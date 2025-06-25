@@ -1,0 +1,28 @@
+version: 2
+services:
+  backend:
+    source: packages/backend
+    build:
+      commands:
+        - npm install
+        - npx prisma generate
+        - npm run build
+    start: npm run start:prod
+    variables:
+      DATABASE_URL: ${{Postgres.DATABASE_URL}}
+      JWT_SECRET: ${{JWT_SECRET}}
+      PORT: ${{PORT}}
+
+  frontend:
+    source: packages/frontend
+    build:
+      commands:
+        - npm install
+        - npm run build
+    start: npm run preview
+    variables:
+      VITE_API_URL: ${{Backend.RAILWAY_PUBLIC_DOMAIN}}
+
+plugins:
+  - type: postgresql
+    name: Postgres
