@@ -1,22 +1,23 @@
-# 🚀 PERSMON EMS - Production Deployment Guide
-
-**DEADLINE: Ready by tomorrow**
+# 🚀 Employee Management Software - Deployment Guide
 
 ## 📋 Current Status
 
 ✅ Local Development Working  
 ✅ Database Connected  
 ✅ Production Seed Data Created  
-✅ Frontend: http://localhost:3000  
-✅ Backend: http://localhost:3001  
-✅ API Documentation: http://localhost:3001/api
+✅ Frontend: [http://localhost:3002](http://localhost:3002)  
+✅ Backend: [http://localhost:3003](http://localhost:3003)  
+✅ API Documentation: [http://localhost:3003/api](http://localhost:3003/api)
 
-## 🔐 Login Credentials (Demo)
+## 🔐 Demo Credentials
 
-- **Admin**: admin@persmon.com / admin123
-- **HR**: hr@persmon.com / admin123
-- **CFO**: cfo@persmon.com / admin123
-- **Employee**: employee@persmon.com / admin123
+```text
+Admin: admin@persmon.com / Password123!
+HR Manager: hr@persmon.com / Password123!
+CFO: cfo@persmon.com / Password123!
+Employee: employee@persmon.com / Password123!
+System Admin: sysadmin@persmon.com / Password123!
+```
 
 ---
 
